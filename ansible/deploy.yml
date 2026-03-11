@@ -1,0 +1,7 @@
+---
+- name: Deploy Docker Container
+  hosts: appserver
+  become: true
+
+  roles:
+    - app
