@@ -8,7 +8,7 @@ pipeline {
 
    steps {
 
-    git 'https://github.com/YOUR_USERNAME/devops-cicd-project.git'
+    git 'https://github.com/vikaspawar683-beep/Devops-CI-CD-project.git'
 
    }
 
