@@ -1,7 +1,17 @@
----
-- name: Deploy Docker Container
-  hosts: appserver
-  become: true
+- hosts: appserver
+  become: yes
 
-  roles:
-    - app
+  tasks:
+
+  - name: install docker
+    apt:
+      name: docker.io
+      state: present
+
+  - name: run container
+    docker_container:
+      name: devops-app
+      image: devops-app
+      state: started
+      ports:
+        - "8080:8080"
