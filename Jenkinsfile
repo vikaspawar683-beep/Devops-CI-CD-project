@@ -5,34 +5,55 @@ pipeline {
  stages {
 
   stage('Checkout') {
+
    steps {
-    git 'https://github.com/user/project.git'
+
+    git 'https://github.com/YOUR_USERNAME/devops-cicd-project.git'
+
    }
+
   }
 
   stage('Build') {
+
    steps {
+
     sh 'mvn clean package'
+
    }
+
   }
 
   stage('Docker Build') {
+
    steps {
-    sh 'docker build -t myapp .'
+
+    sh 'docker build -t devops-app .'
+
    }
+
   }
 
-  stage('Terraform Apply') {
+  stage('Terraform Deploy') {
+
    steps {
+
     sh 'cd terraform && terraform init'
+
     sh 'cd terraform && terraform apply -auto-approve'
+
    }
+
   }
 
-  stage('Deploy') {
+  stage('Deploy App') {
+
    steps {
+
     sh 'ansible-playbook ansible/deploy.yml'
+
    }
+
   }
 
  }
