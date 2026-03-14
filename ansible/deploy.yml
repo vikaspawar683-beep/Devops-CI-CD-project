@@ -1,17 +1,20 @@
-- hosts: appserver
-  become: yes
+---
+- hosts: server
+  become: true
 
   tasks:
 
-  - name: install docker
+  - name: Install Docker
     apt:
       name: docker.io
       state: present
+      update_cache: yes
 
-  - name: run container
-    docker_container:
-      name: devops-app
-      image: devops-app
+  - name: Start Docker
+    service:
+      name: docker
       state: started
-      ports:
-        - "8080:8080"
+      enabled: yes
+
+  - name: Run Container
+    command: docker run -d -p 8080:8080 java-app
