@@ -5,7 +5,7 @@ pipeline {
 
         stage('Git Pull') {
             steps {
-                git 'https://github.com/yourrepo/devops-project.git'
+                git 'git@github.com:vikaspawar683-beep/Devops-CI-CD-project.git'
             }
         }
 
