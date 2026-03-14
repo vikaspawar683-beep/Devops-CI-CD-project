@@ -1,6 +1,6 @@
 resource "aws_security_group" "devops_sg" {
   name   = "devops-sg"
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = aws_vpc.main.id
 
   ingress {
     from_port   = 22
@@ -26,7 +26,7 @@ resource "aws_security_group" "devops_sg" {
 
 resource "aws_security_group" "alb_sg" {
   name   = "alb-sg"
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = aws_vpc.main.id
 
   ingress {
     from_port   = 80
