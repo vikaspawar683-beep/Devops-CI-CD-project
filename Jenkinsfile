@@ -1,61 +1,63 @@
 pipeline {
+    agent any
 
- agent any
+    stages {
 
- stages {
+        stage('Git Pull') {
+            steps {
+                git 'https://github.com/yourrepo/devops-project.git'
+            }
+        }
 
-  stage('Checkout') {
+        stage('Maven Build') {
+            steps {
+                dir('app') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
 
-   steps {
+        stage('Docker Build') {
+            steps {
+                dir('app') {
+                    sh 'docker build -t java-app .'
+                }
+            }
+        }
 
-    git 'https://github.com/vikaspawar683-beep/Devops-CI-CD-project.git'
+        stage('Terraform Init') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform init'
+                }
+            }
+        }
 
-   }
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
 
-  }
+        stage('Get Public IP') {
+            steps {
+                script {
+                    def ip = sh(
+                        script: "cd terraform && terraform output -raw public_ip",
+                        returnStdout: true
+                    ).trim()
 
-  stage('Build') {
+                    sh "sed -i 's/IP/${ip}/g' ansible/inventory.ini"
+                }
+            }
+        }
 
-   steps {
-
-    sh 'mvn clean package'
-
-   }
-
-  }
-
-  stage('Docker Build') {
-
-   steps {
-
-    sh 'docker build -t devops-app .'
-
-   }
-
-  }
-
-  stage('Terraform Deploy') {
-
-   steps {
-
-    sh 'cd terraform && terraform init'
-
-    sh 'cd terraform && terraform apply -auto-approve'
-
-   }
-
-  }
-
-  stage('Deploy App') {
-
-   steps {
-
-    sh 'ansible-playbook ansible/deploy.yml'
-
-   }
-
-  }
-
- }
-
+        stage('Ansible Deploy') {
+            steps {
+                sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
+            }
+        }
+    }
 }
