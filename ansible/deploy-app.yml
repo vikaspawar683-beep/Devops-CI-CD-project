@@ -12,10 +12,21 @@
         group: ubuntu
         mode: '0755'
 
-    - name: Copy application files
+    - name: Copy JAR file
       copy:
-        src: ../
-        dest: /home/ubuntu/app/
+        src: /home/ubuntu/Devops-CI-CD-project/target/myapp-1.0.jar
+        dest: /home/ubuntu/app/myapp-1.0.jar
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Copy Dockerfile
+      copy:
+        src: /home/ubuntu/Devops-CI-CD-project/Dockerfile
+        dest: /home/ubuntu/app/Dockerfile
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
 
     - name: Remove old container if exists
       shell: docker rm -f java-app-container || true
