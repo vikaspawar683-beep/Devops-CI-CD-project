@@ -8,19 +8,19 @@ pipeline {
             }
         }
 
-        stage('Build JAR') {
+        stage('Build Application') {
             steps {
                 sh 'mvn clean package -DskipTests'
             }
         }
 
-        stage('Deploy to App Servers') {
+        stage('Deploy Application') {
             steps {
                 sh 'ansible-playbook -i tarraform/inventory.ini deploy-app.yml'
             }
         }
 
-        stage('Verify Application') {
+        stage('Verify ALB') {
             steps {
                 sh 'curl http://devops-alb-1685685824.ap-south-1.elb.amazonaws.com'
             }
@@ -29,10 +29,10 @@ pipeline {
 
     post {
         success {
-            echo 'Application deployed successfully through Jenkins CI/CD Pipeline.'
+            echo 'CI/CD Pipeline executed successfully.'
         }
         failure {
-            echo 'Pipeline failed. Check console output.'
+            echo 'Pipeline failed. Check Jenkins logs.'
         }
     }
 }
