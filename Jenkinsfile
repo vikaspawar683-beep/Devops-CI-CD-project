@@ -2,62 +2,31 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Git Pull') {
+        stage('Checkout Code') {
             steps {
-                git 'git@github.com:vikaspawar683-beep/Devops-CI-CD-project.git'
+                git branch: 'main', url: 'git@github.com:vikaspawar683-beep/Devops-CI-CD-project.git'
             }
         }
 
-        stage('Maven Build') {
+        stage('Build JAR') {
             steps {
-                dir('app') {
-                    sh 'mvn clean package'
-                }
+                sh 'mvn clean package -DskipTests'
             }
         }
 
-        stage('Docker Build') {
+        stage('Deploy to App Servers') {
             steps {
-                dir('app') {
-                    sh 'docker build -t java-app .'
-                }
+                sh 'ansible-playbook -i tarraform/inventory.ini deploy-app.yml'
             }
         }
+    }
 
-        stage('Terraform Init') {
-            steps {
-                dir('terraform') {
-                    sh 'terraform init'
-                }
-            }
+    post {
+        success {
+            echo 'Application deployed successfully on App1 and App2.'
         }
-
-        stage('Terraform Apply') {
-            steps {
-                dir('terraform') {
-                    sh 'terraform apply -auto-approve'
-                }
-            }
-        }
-
-        stage('Get Public IP') {
-            steps {
-                script {
-                    def ip = sh(
-                        script: "cd terraform && terraform output -raw public_ip",
-                        returnStdout: true
-                    ).trim()
-
-                    sh "sed -i 's/IP/${ip}/g' ansible/inventory.ini"
-                }
-            }
-        }
-
-        stage('Ansible Deploy') {
-            steps {
-                sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
-            }
+        failure {
+            echo 'Pipeline failed. Please check console output.'
         }
     }
 }
