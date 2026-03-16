@@ -1,1 +1,2 @@
-/home/ubuntu/Devops-CI-CD-project/src/main/java/com/mycompany/App.java
+/var/lib/jenkins/Devops-CI-CD-project/src/main/java/com/mycompany/myapp/HelloController.java
+/var/lib/jenkins/Devops-CI-CD-project/src/main/java/com/mycompany/myapp/MyappApplication.java
