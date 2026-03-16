@@ -19,14 +19,20 @@ pipeline {
                 sh 'ansible-playbook -i tarraform/inventory.ini deploy-app.yml'
             }
         }
+
+        stage('Verify Application') {
+            steps {
+                sh 'curl http://devops-alb-1685685824.ap-south-1.elb.amazonaws.com'
+            }
+        }
     }
 
     post {
         success {
-            echo 'Application deployed successfully on App1 and App2.'
+            echo 'Application deployed successfully through Jenkins CI/CD Pipeline.'
         }
         failure {
-            echo 'Pipeline failed. Please check console output.'
+            echo 'Pipeline failed. Check console output.'
         }
     }
 }
