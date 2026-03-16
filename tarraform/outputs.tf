@@ -1,15 +1,15 @@
-output "vpc_id" {
-  value = aws_vpc.main_vpc.id
-}
-
-output "public_subnet1_id" {
-  value = aws_subnet.public_subnet1.id
-}
-
-output "public_subnet2_id" {
-  value = aws_subnet.public_subnet2.id
-}
-
 output "load_balancer_dns" {
   value = aws_lb.app_lb.dns_name
+}
+
+output "jenkins_public_ip" {
+  value = aws_instance.jenkins_server.public_ip
+}
+
+output "app1_public_ip" {
+  value = aws_instance.app1.public_ip
+}
+
+output "app2_public_ip" {
+  value = aws_instance.app2.public_ip
 }
