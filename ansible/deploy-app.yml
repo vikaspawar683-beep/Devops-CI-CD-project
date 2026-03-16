@@ -1,4 +1,3 @@
----
 - name: Deploy Java app container
   hosts: appservers
   become: yes
@@ -20,17 +19,15 @@
 
     - name: Copy Dockerfile
       copy:
-        src: /home/ubuntu/Devops-CI-CD-project/Dockerfile
+        src: Dockerfile
         dest: /home/ubuntu/app/Dockerfile
-        owner: ubuntu
-        group: ubuntu
         mode: '0644'
 
     - name: Remove old container if exists
       shell: docker rm -f java-app-container || true
 
     - name: Remove old image if exists
-      shell: docker rmi java-app:latest || true
+      shell: docker rmi -f java-app:latest || true
 
     - name: Build Docker image
       shell: docker build -t java-app:latest /home/ubuntu/app
