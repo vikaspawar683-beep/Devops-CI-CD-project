@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK21'
+        maven 'Maven3'
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -16,7 +21,7 @@ pipeline {
 
         stage('Deploy Application') {
             steps {
-                sh 'ansible-playbook -i tarraform/inventory.ini deploy-app.yml'
+                sh 'ansible-playbook -i tarraform/inventory.ini ansible/deploy-app.yml'
             }
         }
 
@@ -32,7 +37,7 @@ pipeline {
             echo 'CI/CD Pipeline executed successfully.'
         }
         failure {
-            echo 'Pipeline failed. Check Jenkins logs.'
+            echo 'Pipeline failed. Check console output.'
         }
     }
 }
