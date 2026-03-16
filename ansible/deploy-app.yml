@@ -1,0 +1,30 @@
+---
+- name: Deploy Java app container
+  hosts: appservers
+  become: yes
+
+  tasks:
+    - name: Create app directory
+      file:
+        path: /home/ubuntu/app
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Copy application files
+      copy:
+        src: ../
+        dest: /home/ubuntu/app/
+
+    - name: Remove old container if exists
+      shell: docker rm -f java-app-container || true
+
+    - name: Remove old image if exists
+      shell: docker rmi java-app:latest || true
+
+    - name: Build Docker image
+      shell: docker build -t java-app:latest /home/ubuntu/app
+
+    - name: Run Docker container
+      shell: docker run -d --name java-app-container -p 8080:8080 java-app:latest
