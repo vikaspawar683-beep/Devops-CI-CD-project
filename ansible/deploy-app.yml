@@ -19,7 +19,7 @@
 
     - name: Copy Dockerfile
       copy:
-        src: Dockerfile
+        src: ../Dockerfile
         dest: /home/ubuntu/app/Dockerfile
         mode: '0644'
 
