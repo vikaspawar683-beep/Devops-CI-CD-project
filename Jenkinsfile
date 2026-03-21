@@ -29,8 +29,25 @@ pipeline {
         stage('Verify Application') {
             steps {
                 sh '''
-                    ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/final-devops-key.pem ubuntu@13.234.213.7 "curl -f http://localhost:8080"
-                    ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/final-devops-key.pem ubuntu@13.126.156.47 "curl -f http://localhost:8080"
+                    for i in 1 2 3 4 5; do
+                        echo "Checking app1 attempt $i"
+                        ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/final-devops-key.pem ubuntu@13.234.213.7 "curl -sS --max-time 10 http://localhost:8080" && break
+                        sleep 10
+                        if [ "$i" = "5" ]; then
+                            echo "app1 verification failed"
+                            exit 1
+                        fi
+                    done
+
+                    for i in 1 2 3 4 5; do
+                        echo "Checking app2 attempt $i"
+                        ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/final-devops-key.pem ubuntu@13.126.156.47 "curl -sS --max-time 10 http://localhost:8080" && break
+                        sleep 10
+                        if [ "$i" = "5" ]; then
+                            echo "app2 verification failed"
+                            exit 1
+                        fi
+                    done
                 '''
             }
         }
