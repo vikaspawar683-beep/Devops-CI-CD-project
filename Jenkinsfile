@@ -6,6 +6,10 @@ pipeline {
         maven 'maven3'
     }
 
+    environment {
+        APP_URL = 'http://13.234.213.7:8080'
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -26,35 +30,19 @@ pipeline {
             }
         }
 
-        stage('Verify App1') {
+        stage('Verify Application') {
             steps {
                 sh '''
                     for i in 1 2 3 4 5; do
-                        STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://13.234.213.7:8080)
-                        echo "App1 Attempt $i - HTTP Status: $STATUS"
+                        STATUS=$(curl -s -o /dev/null -w "%{http_code}" $APP_URL)
+                        echo "Attempt $i - HTTP Status: $STATUS"
                         if [ "$STATUS" = "200" ]; then
+                            echo "Application is running successfully."
                             exit 0
                         fi
                         sleep 15
                     done
-                    echo "App1 verification failed."
-                    exit 1
-                '''
-            }
-        }
-
-        stage('Verify App2') {
-            steps {
-                sh '''
-                    for i in 1 2 3 4 5; do
-                        STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://13.126.156.47:8080)
-                        echo "App2 Attempt $i - HTTP Status: $STATUS"
-                        if [ "$STATUS" = "200" ]; then
-                            exit 0
-                        fi
-                        sleep 15
-                    done
-                    echo "App2 verification failed."
+                    echo "Application verification failed."
                     exit 1
                 '''
             }
