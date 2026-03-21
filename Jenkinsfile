@@ -29,8 +29,8 @@ pipeline {
         stage('Verify Application') {
             steps {
                 sh '''
-                    sudo -u jenkins ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/final-devops-key.pem ubuntu@13.234.213.7 "curl -f http://localhost:8080"
-                    sudo -u jenkins ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/final-devops-key.pem ubuntu@13.126.156.47 "curl -f http://localhost:8080"
+                    ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/final-devops-key.pem ubuntu@13.234.213.7 "curl -f http://localhost:8080"
+                    ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/final-devops-key.pem ubuntu@13.126.156.47 "curl -f http://localhost:8080"
                 '''
             }
         }
