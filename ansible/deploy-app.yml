@@ -1,3 +1,4 @@
+---
 - name: Deploy Java app container
   hosts: app_servers
   become: yes
@@ -22,17 +23,25 @@
       file:
         path: /home/ubuntu/app
         state: directory
+        owner: ubuntu
+        group: ubuntu
         mode: '0755'
 
     - name: Copy JAR file
       copy:
-        src: target/myapp-1.0.jar
+        src: ../target/myapp-1.0.jar
         dest: /home/ubuntu/app/myapp.jar
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
 
     - name: Copy Dockerfile
       copy:
-        src: Dockerfile
+        src: ../Dockerfile
         dest: /home/ubuntu/app/Dockerfile
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
 
     - name: Remove old container if exists
       shell: docker rm -f java-app || true
