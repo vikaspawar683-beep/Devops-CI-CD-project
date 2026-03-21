@@ -1,5 +1,5 @@
 resource "aws_lb" "app_lb" {
-  name               = "devops-alb"
+  name               = "devops-alb-new"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
@@ -10,6 +10,6 @@ resource "aws_lb" "app_lb" {
   ]
 
   tags = {
-    Name = "DevOps-ALB"
+    Name = "DevOps-ALB-New"
   }
 }
